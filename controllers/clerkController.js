@@ -38,19 +38,23 @@ exports.getSingleClerk = async (req, res) => {
 
 exports.loginClerk = async (req, res) => {
   const { email, password } = req.body;
-  if (!email || !password) {
-    throw new Error("Please Provide Valid Credentials");
-  }
+  try {
+    if (!email || !password) {
+      throw new Error("Please Provide Valid Credentials");
+    }
 
-  const user = await Clerk.findOne({ where: { email: email } });
-  if (!user) {
-    res.status(404).json({ message: "Clerk Does Not Exist" });
+    const user = await Clerk.findOne({ where: { email: email } });
+    if (!user) {
+      res.status(404).json({ message: "Clerk Does Not Exist" });
+    }
+    const passwordIsCorrect = await user.comparePassword(password);
+    if (!passwordIsCorrect) {
+      throw new Error("Please Provide Valid Credentials");
+    }
+    const tokenUser = createTokenUser(user);
+    attachCookiesToResponse({ res, user: tokenUser });
+    res.status(200).json({ data: tokenUser });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
-  const passwordIsCorrect = await user.comparePassword(password);
-  if (!passwordIsCorrect) {
-    throw new Error("Please Provide Valid Credentials");
-  }
-  const tokenUser = createTokenUser(user);
-  attachCookiesToResponse({ res, user: tokenUser });
-  res.status(200).json({ data: tokenUser });
 };

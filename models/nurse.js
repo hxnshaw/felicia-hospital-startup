@@ -75,9 +75,9 @@ module.exports = (sequelize, DataTypes) => {
 
   Nurse.prototype.comparePassword = async function (nursePassword) {
     const nurse = this;
-    const isMatch = await bcrypt.comparePassword(nursePassword, nurse.password);
+    const isMatch = await bcrypt.compare(nursePassword, nurse.password);
 
-    if (isMatch) {
+    if (!isMatch) {
       throw new Error("Invalid Credentials");
     }
     return isMatch;

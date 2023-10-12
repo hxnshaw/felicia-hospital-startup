@@ -3,7 +3,10 @@ const router = express.Router();
 const {
   createClerk,
   getSingleClerk,
+  loginClerk,
 } = require("../controllers/clerkController");
+
+router.route("/login").post(loginClerk);
 
 router.route("/register").post(createClerk);
 

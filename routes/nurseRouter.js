@@ -3,7 +3,10 @@ const router = express.Router();
 const {
   createNurse,
   getSingleNurse,
+  loginNurse,
 } = require("../controllers/nurseController");
+
+router.route("/login").post(loginNurse);
 
 router.route("/register").post(createNurse);
 
