@@ -55,3 +55,25 @@ exports.getSingleNurse = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.getAllNurses = async (req, res) => {
+  try {
+    const nurses = await Nurse.findAll({});
+    if (nurses === null) {
+      return res.status(404).json({ message: "Nurses Not Found" });
+    }
+    res.status(200).json({ count: nurses.length, data: nurses });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.logoutNurse = async (req, res) => {
+  try {
+    res.cookie("token", "logout", {
+      httpOnly: true,
+      expires: new Date(Date.now()),
+    });
+    res.status(200).json({ message: "Success" });
+  } catch (error) {}
+};
