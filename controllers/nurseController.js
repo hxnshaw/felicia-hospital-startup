@@ -75,5 +75,49 @@ exports.logoutNurse = async (req, res) => {
       expires: new Date(Date.now()),
     });
     res.status(200).json({ message: "Success" });
-  } catch (error) {}
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateNurseProfile = async (req, res) => {
+  const { first_name, last_name, email, telephone_number } = req.body;
+  try {
+    if (!first_name || !last_name || !email || !telephone_number) {
+      throw new Error("Please Provide Valid Credentials");
+    }
+    const user = await Nurse.findOne({ where: { id: req.user.userId } });
+    if (!user) {
+      return res.status(404).json({ message: "Nurse Does Not Exist" });
+    }
+    user.first_name = first_name;
+    user.last_name = last_name;
+    user.email = email;
+    user.telephone_number = telephone_number;
+    await user.save();
+    const tokenUser = createTokenUser(user);
+    attachCookiesToResponse({ res, user: tokenUser });
+    res.status(200).json({ data: tokenUser });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+exports.updateNursePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+  try {
+    if (!currentPassword || !newPassword) {
+      throw new Error("Please Provide Valid Credentials");
+    }
+    const user = await Nurse.findOne({ where: { id: req.user.userId } });
+
+    if (!user) {
+      return res.status(404).json({ message: "Nurse Does Not Exist" });
+    }
+    user.set({ password: newPassword });
+    res.status(200).json({ message: "New Password Saved" });
+    await user.save();
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
 };

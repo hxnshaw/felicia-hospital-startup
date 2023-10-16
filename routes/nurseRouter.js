@@ -6,16 +6,27 @@ const {
   loginNurse,
   getAllNurses,
   logoutNurse,
+  updateNurseProfile,
+  updateNursePassword,
 } = require("../controllers/nurseController");
+const { authenticateUser } = require("../middlewares/authentication");
 
 router.route("/login").post(loginNurse);
 
-router.route("/profile/logout").get(logoutNurse);
+router
+  .route("/profile/update-profile")
+  .put(authenticateUser, updateNurseProfile);
 
-router.route("/").get(getAllNurses);
+router
+  .route("/profile/update-password")
+  .put(authenticateUser, updateNursePassword);
 
-router.route("/register").post(createNurse);
+router.route("/profile/logout").get(authenticateUser, logoutNurse);
 
-router.route("/:email").get(getSingleNurse);
+router.route("/").get(authenticateUser, getAllNurses);
+
+router.route("/register").post(authenticateUser, createNurse);
+
+router.route("/:email").get(authenticateUser, getSingleNurse);
 
 module.exports = router;
