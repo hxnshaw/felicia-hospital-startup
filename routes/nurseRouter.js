@@ -9,7 +9,10 @@ const {
   updateNurseProfile,
   updateNursePassword,
 } = require("../controllers/nurseController");
-const { authenticateUser } = require("../middlewares/authentication");
+const {
+  authenticateUser,
+  authorizePermissions,
+} = require("../middlewares/authentication");
 
 router.route("/login").post(loginNurse);
 
@@ -23,10 +26,20 @@ router
 
 router.route("/profile/logout").get(authenticateUser, logoutNurse);
 
-router.route("/").get(authenticateUser, getAllNurses);
+router
+  .route("/")
+  .get(authenticateUser, authorizePermissions("clerk"), getAllNurses);
 
-router.route("/register").post(authenticateUser, createNurse);
+router
+  .route("/register")
+  .post(authenticateUser, authorizePermissions("clerk"), createNurse);
 
-router.route("/:email").get(authenticateUser, getSingleNurse);
+router
+  .route("/:email")
+  .get(
+    authenticateUser,
+    authorizePermissions("clerk", "nurse"),
+    getSingleNurse
+  );
 
 module.exports = router;

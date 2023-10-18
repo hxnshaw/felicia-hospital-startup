@@ -10,9 +10,14 @@ const {
   updateClerkPassword,
 } = require("../controllers/clerkController");
 
-const { authenticateUser } = require("../middlewares/authentication");
+const {
+  authenticateUser,
+  authorizePermissions,
+} = require("../middlewares/authentication");
 
-router.route("/").get(authenticateUser, getAllClerks);
+router
+  .route("/")
+  .get(authenticateUser, authorizePermissions("clerk"), getAllClerks);
 
 router.route("/register").post(createClerk);
 
@@ -28,6 +33,8 @@ router
   .route("/profile/update-password")
   .put(authenticateUser, updateClerkPassword);
 
-router.route("/:email").get(authenticateUser, getSingleClerk);
+router
+  .route("/:email")
+  .get(authenticateUser, authorizePermissions("clerk"), getSingleClerk);
 
 module.exports = router;
