@@ -5,6 +5,7 @@ const {
   getSinglePatient,
   getAllPatients,
   updatePatientProfile,
+  deletePatient,
 } = require("../controllers/patientController");
 const {
   authenticateUser,
@@ -25,6 +26,14 @@ router
     authenticateUser,
     authorizePermissions("clerk", "nurse"),
     updatePatientProfile
+  );
+
+router
+  .route("/profile/:patient_id")
+  .delete(
+    authenticateUser,
+    authorizePermissions("clerk", "nurse"),
+    deletePatient
   );
 
 router

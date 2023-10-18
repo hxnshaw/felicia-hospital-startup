@@ -11,10 +11,12 @@ app.use(cookieParser(process.env.JWT_SECRET_KEY));
 const patientRouter = require("./routes/patientRouter");
 const nurseRouter = require("./routes/nurseRouter");
 const clerkRouter = require("./routes/clerkRouter");
+const vitalsRouter = require("./routes/vitalsRouter");
 
 app.use("/api/v1/felicia-hospital/patients", patientRouter);
 app.use("/api/v1/felicia-hospital/nurses", nurseRouter);
 app.use("/api/v1/felicia-hospital/clerks", clerkRouter);
+app.use("/api/v1/felicia-hospital/vitals", vitalsRouter);
 
 app.listen(2024, async () => {
   console.log(`Server is live on port 2024`);

@@ -23,7 +23,7 @@ router.route("/register").post(createClerk);
 
 router.route("/login").post(loginClerk);
 
-router.route("/profile/logout").get(authenticateUser, logoutClerk);
+router.route("/profile/logout").get(logoutClerk);
 
 router
   .route("/profile/update-profile")
