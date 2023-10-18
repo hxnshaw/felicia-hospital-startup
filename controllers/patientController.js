@@ -42,7 +42,7 @@ exports.getSinglePatient = async (req, res) => {
   try {
     const patient = await Patient.findOne({
       where: { patient_id: patient_id },
-      include: ["vitals"],
+      include: ["vitals", "appointment"],
     });
     if (!patient) {
       return res.status(404).json({ message: "Patient Not Found" });
@@ -56,7 +56,7 @@ exports.getSinglePatient = async (req, res) => {
 exports.getAllPatients = async (req, res) => {
   try {
     const patients = await Patient.findAll({
-      include: ["vitals"],
+      include: ["vitals", "appointment"],
     });
     if (patients === null) {
       return res.status(404).json({ message: "No Patient Found" });
