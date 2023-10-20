@@ -8,14 +8,16 @@ exports.createNurse = async (req, res) => {
     if (nurseAlreadyExists) {
       res.status(400).json({ message: "Nurse Already Exists" });
     }
-    const nurse = await Nurse.create({
+    const user = await Nurse.create({
       first_name,
       last_name,
       email,
       telephone_number,
       password,
     });
-    res.status(201).json({ message: "Nurse Created", nurse });
+    const tokenUser = createTokenUser(user);
+    attachCookiesToResponse({ res, user: tokenUser });
+    res.status(200).json({ data: tokenUser });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -119,5 +121,22 @@ exports.updateNursePassword = async (req, res) => {
     await user.save();
   } catch (error) {
     res.status(500).json({ message: error.message });
+  }
+};
+
+exports.deleteNurse = async (req, res) => {
+  const { id: nurseId } = req.params;
+  try {
+    const nurse = await Nurse.findOne({
+      where: { id: nurseId },
+    });
+    if (!nurse) {
+      return res.status(404).json({ message: "Nurse Not Found" });
+    }
+
+    await nurse.destroy();
+    res.status(200).json({ message: "Nurse Deleted!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 };

@@ -8,6 +8,7 @@ const {
   getAllClerks,
   updateClerkProfile,
   updateClerkPassword,
+  deleteClerk,
 } = require("../controllers/clerkController");
 
 const {
@@ -36,5 +37,9 @@ router
 router
   .route("/:email")
   .get(authenticateUser, authorizePermissions("clerk"), getSingleClerk);
+
+router
+  .route("/delete-clerk/:id")
+  .delete(authenticateUser, authorizePermissions("clerk"), deleteClerk);
 
 module.exports = router;

@@ -8,6 +8,7 @@ const {
   logoutNurse,
   updateNurseProfile,
   updateNursePassword,
+  deleteNurse,
 } = require("../controllers/nurseController");
 const {
   authenticateUser,
@@ -30,9 +31,7 @@ router
   .route("/")
   .get(authenticateUser, authorizePermissions("clerk"), getAllNurses);
 
-router
-  .route("/register")
-  .post(authenticateUser, authorizePermissions("clerk"), createNurse);
+router.route("/register").post(authenticateUser, createNurse);
 
 router
   .route("/:email")
@@ -41,5 +40,9 @@ router
     authorizePermissions("clerk", "nurse"),
     getSingleNurse
   );
+
+router
+  .route("/delete-nurse/:id")
+  .delete(authenticateUser, authorizePermissions("clerk"), deleteNurse);
 
 module.exports = router;

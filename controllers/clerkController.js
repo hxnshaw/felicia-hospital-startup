@@ -127,3 +127,20 @@ exports.updateClerkPassword = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+exports.deleteClerk = async (req, res) => {
+  const { id: clerkId } = req.params;
+  try {
+    const clerk = await Clerk.findOne({
+      where: { id: clerkId },
+    });
+    if (!clerk) {
+      return res.status(404).json({ message: "Clerk Not Found" });
+    }
+
+    await clerk.destroy();
+    res.status(200).json({ message: "Clerk Deleted!" });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
