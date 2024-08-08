@@ -4,6 +4,7 @@ const { sequelize } = require("./models");
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const app = express();
+const port = process.env.DB_PORT || 2024;
 app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser(process.env.JWT_SECRET_KEY));
@@ -20,7 +21,7 @@ app.use("/api/v1/felicia-hospital/clerks", clerkRouter);
 app.use("/api/v1/felicia-hospital/vitals", vitalsRouter);
 app.use("/api/v1/felicia-hospital/appointments", appointmentRouter);
 
-app.listen(2024, async () => {
+app.listen(port, async () => {
   console.log(`Server is live on port 2024`);
   await sequelize.authenticate();
   console.log(`Database Connected!`);
