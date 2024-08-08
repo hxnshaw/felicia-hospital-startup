@@ -1,6 +1,6 @@
-# felicia-hospital-startup
-## INTRODUCTION
-This is the API for a hypothetical hospital, where patients can register, have their vitals taken and book an appointment.
+## To run the application, execute the following commands in sequence
+
+```Javascript
 1. npm install
 2. npm start
 
