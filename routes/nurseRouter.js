@@ -31,7 +31,7 @@ router
   .route("/")
   .get(authenticateUser, authorizePermissions("clerk"), getAllNurses);
 
-router.route("/register").post(authenticateUser, createNurse);
+router.route("/register").post(createNurse);
 
 router
   .route("/:email")
