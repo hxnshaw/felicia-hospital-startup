@@ -1,4 +1,5 @@
 "use strict";
+require("dotenv").config();
 
 const fs = require("fs");
 const path = require("path");
@@ -10,13 +11,13 @@ const config = require(__dirname + "/../config/config.js")[env];
 const db = {};
 
 let sequelize;
-if (config.use_env_variable) {
-  sequelize = new Sequelize(process.env.INTERNAL_DB_URL, config);
+if (process.env.DB_URL) {
+  sequelize = new Sequelize(process.env.DB_URL, config);
 } else {
   sequelize = new Sequelize(
-    config.database,
-    config.username,
-    config.password,
+    process.env.DB_DATABASE_NAME,
+    process.env.DB_USERNAME,
+    process.env.DB_PASSWORD,
     config
   );
 }
